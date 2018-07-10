@@ -27,7 +27,6 @@ const user = {
   actions: {
     // 登录
     Login({ commit }, userInfo) {
-        console.log(111111)
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         login(username, userInfo.password).then(response => {
@@ -43,10 +42,11 @@ const user = {
     },
 
     // 获取用户信息
-    GetInfo({ commit, state }) {
+    GetInfo({ commit }) {
+
       return new Promise((resolve, reject) => {
         getInfo().then(response => {
-          const data = response.data
+          const data = response
           if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
             commit('SET_ROLES', data.roles)
           } else {
@@ -78,6 +78,7 @@ const user = {
     // 前端 登出
     FedLogOut({ commit }) {
       return new Promise(resolve => {
+        console.log(333);
         commit('SET_TOKEN', '')
         removeToken()
         resolve()

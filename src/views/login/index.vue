@@ -36,11 +36,12 @@ export default {
   name: 'login',
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
+      /*if (!isvalidUsername(value)) {
         callback(new Error('请输入正确的用户名'))
       } else {
         callback()
-      }
+      }*/
+        callback()
     }
     const validatePass = (rule, value, callback) => {
       if (value.length < 5) {
@@ -76,7 +77,6 @@ export default {
           this.loading = true
           this.$store.dispatch('Login', this.loginForm).then(() => {
             this.loading = false
-              console.log(111111)
             this.$router.push({ path: '/' })
           }).catch(() => {
             this.loading = false

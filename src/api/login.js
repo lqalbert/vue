@@ -14,14 +14,13 @@ export function login(username, password) {
 export function getInfo() {
   return request({
     url: '/get-details',
-    method: 'post',
-
+    method: 'post'
   })
 }
 
 export function logout() {
   return request({
-    url: '/user/logout',
+    url: '/logout',
     method: 'post'
   })
 }
