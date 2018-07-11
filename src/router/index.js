@@ -37,6 +37,26 @@ export const constantRouterMap = [
     }]
   },
 
+
+
+
+
+    {
+        path: '/roles',
+        component: Layout,
+        redirect: '/roles/list',
+        name: 'jueselibiao',
+        hidden: true,
+        children: [{
+            path: 'list',
+            component: () => import('@/views/roles/index')
+        }]
+    },
+
+
+
+
+
   {
     path: '/example',
     component: Layout,
@@ -46,9 +66,9 @@ export const constantRouterMap = [
     children: [
       {
         path: 'table',
-        name: 'Table',
+        name: 'Commontable',
         component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        meta: { title: 'Commontable', icon: 'table' }
       },
       {
         path: 'tree',
