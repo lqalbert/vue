@@ -1,5 +1,5 @@
 <template>
-    <commontable :options="options"  :table-data="tableData" :multiple-selection="multipleSelection" ></commontable>
+    <commontable :search="search"  :table-data="tableData"  ></commontable>
 </template>
 
 <script>
@@ -11,6 +11,7 @@
 
         data() {
             return {
+                //填充数据
                 tableData: [{
                     date: '2016-05-03',
                     name: '王小虎',
@@ -40,23 +41,43 @@
                     name: '王小虎',
                     address: '上海市普陀区金沙江路 1518 弄'
                 }],
-                multipleSelection: [],
-                options:[{
-                    value: '选项1',
-                    label: '黄金糕'
-                }, {
-                    value: '选项2',
-                    label: '双皮奶'
-                }, {
-                    value: '选项3',
-                    label: '蚵仔煎'
-                }, {
-                    value: '选项4',
-                    label: '龙须面'
-                }, {
-                    value: '选项5',
-                    label: '北京烤鸭'
-                }]
+                //搜索单选和下拉框
+                search:{
+                    options:{
+                        item1:{
+                            name:'角色名称',
+                            items:['超级管理','文章管理']
+                        },
+                        item2:{
+                            name:'是否启用',
+                            items:['是','否']
+                        },
+                        item2:{
+                            name:'是否启用',
+                            items:['是','否']
+                        },
+                        /*添加更多……*/
+                    },
+                    radios:{
+                        item1:{
+                            name:'角色名称',
+                            items:['超级管理','文章管理']
+                        },
+                        item2:{
+                            name:'是否启用',
+                            items:['是','否']
+                        },
+                        /*添加更多……*/
+                    },
+                    /*输入框*/
+                    inputs:{
+
+                    }
+
+
+
+                },
+
             }
         },
 

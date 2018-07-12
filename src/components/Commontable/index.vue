@@ -2,25 +2,32 @@
     <div class="contable">
         <!--顶部按钮和搜索框-->
         <div>
-            <el-row>
+
                 <el-button type="primary" icon="el-icon-circle-plus">添加数据</el-button>
-                <el-button type="danger" icon="el-icon-delete">批量删除</el-button>
+                <el-button type="danger" icon="el-icon-delete" style="margin-bottom: 10px;">批量删除</el-button>
 
                 <el-form :inline="true" :model="formInline" class="demo-form-inline"
                          style="display: inline-block;margin-left: 20px;">
                     <el-form-item label="审批人">
                         <el-input v-model="formInline.user" placeholder="审批人"></el-input>
                     </el-form-item>
+
                     <el-form-item label="活动区域">
                         <el-select v-model="formInline.region" placeholder="活动区域">
                             <el-option label="区域一" value="shanghai"></el-option>
                             <el-option label="区域二" value="beijing"></el-option>
                         </el-select>
                     </el-form-item>
+
+                    <el-form-item label="特殊资源">
+                        <el-radio-group v-model="sizeForm.resource" size="medium">
+                            <el-radio border label="线上品牌商赞助"></el-radio>
+                            <el-radio border label="线下场地免费"></el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+
                     <el-button type="primary">查询</el-button>
                 </el-form>
-
-            </el-row>
         </div>
 
         <!--表格-->
@@ -80,7 +87,7 @@
 <script>
     export default {
         name: 'commontable',
-        props: ['tableData', 'multipleSelection', 'options'],
+        props: ['tableData', 'search'],
         data() {
             return {
                 vform: '',
@@ -88,7 +95,17 @@
                 formInline: {
                     user: '',
                     region: ''
-                }
+                },
+                sizeForm: {
+                    name: '',
+                    region: '',
+                    date1: '',
+                    date2: '',
+                    delivery: false,
+                    type: [],
+                    resource: '',
+                    desc: ''
+                },
 
             }
         }
