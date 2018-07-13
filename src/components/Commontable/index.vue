@@ -34,28 +34,23 @@
         <el-table
                 border
                 ref="multipleTable"
-                :data="tableData"
+                :data="tableData.data"
                 tooltip-effect="dark"
                 style="width: 100%;">
             <el-table-column
                     type="selection"
                     width="55">
             </el-table-column>
-            <el-table-column
-                    label="日期"
-                    width="120">
-                <template slot-scope="scope">{{ scope.row.date }}</template>
+            <el-table-column v-for="item in tableData.tableTitle"
+                    :label="item.Type.substr(0,4)=='enum'?(item.Comment.split(':'))[0]:item.Comment"
+                    width="120"
+                    :prop="item.Field">
             </el-table-column>
-            <el-table-column
+           <!-- <el-table-column
                     prop="name"
                     label="姓名"
                     width="120">
-            </el-table-column>
-            <el-table-column
-                    prop="address"
-                    label="地址"
-                    show-overflow-tooltip>
-            </el-table-column>
+            </el-table-column>-->
             <el-table-column label="操作">
                 <template slot-scope="scope">
                     <el-button
@@ -108,7 +103,12 @@
                 },
 
             }
-        }
+        },
+        methods:{
+            transformEnum:function (comment) {
+
+            },
+        },
     }
 </script>
 
