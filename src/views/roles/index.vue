@@ -1,8 +1,10 @@
 <template>
     <commontable :table-data="allData"></commontable>
+    <!--<div v-on:click="getList">haha</div>-->
 </template>
 
 <script>
+    import { getRoles } from '@/api/roles'
     import Commontable from '@/components/Commontable'
 
     export default {
@@ -31,6 +33,7 @@
                             "Privileges": "select,insert,update,references",
                             "Comment": "用户名",
                         },
+
                         {
                             "Field": "email",
                             "Type": "varchar(255)",
@@ -55,6 +58,7 @@
                             "Comment": "是否启用:y=是,n=否",
                         },
 
+
                     ],
                     //表数据
                     data: [{
@@ -74,6 +78,16 @@
 
 
             }
+        },
+        methods:{
+         /* getList:function () {
+                  getRoles().then(response => {
+                      const data = response
+                      console.log(data)
+                  }).catch(error => {
+                      reject(error)
+                  })
+          }*/
         },
 
     }

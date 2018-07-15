@@ -1,9 +1,8 @@
 import request from '@/utils/request'
 
-export function getList(params) {
+export  function getRoles(params) {
   return request({
     url: '/roles',
-    method: 'get',
-    params
+    method: 'post'
   })
 }

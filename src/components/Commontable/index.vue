@@ -43,7 +43,6 @@
             </el-table-column>
             <el-table-column v-for="item in tableData.tableTitle"
                     :label="item.Type.substr(0,4)=='enum'?(item.Comment.split(':'))[0]:item.Comment"
-                    width="120"
                     :prop="item.Field">
             </el-table-column>
            <!-- <el-table-column
@@ -70,7 +69,7 @@
         <el-pagination
                 style="margin: 10px auto"
                 background
-                :page-sizes="[100, 200, 300, 400]"
+                :page-sizes="[5, 15, 20, 25,30,35]"
                 :page-size="100"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="400">
