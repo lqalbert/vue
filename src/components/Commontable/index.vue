@@ -2,32 +2,22 @@
     <div class="contable">
         <!--顶部按钮和搜索框-->
         <div>
-
             <el-button type="primary" icon="el-icon-circle-plus">添加数据</el-button>
             <el-button type="danger" icon="el-icon-delete" style="margin-bottom: 10px;">批量删除</el-button>
-
-            <el-form :inline="true" :model="formInline" class="demo-form-inline"
+            <el-form v-for="item in tableTitle" :inline="true" :model="formInline" class="demo-form-inline"
                      style="display: inline-block;margin-left: 20px;">
-                <el-form-item label="审批人">
-                    <el-input v-model="formInline.user" placeholder="审批人"></el-input>
+                <el-form-item v-if="item.Type.substr(0,4)=='varc' && !isBan(item.Field,banFields)" :label="item.Comment">
+                    <el-input v-model="formInline[item.Field]" :placeholder="item.Comment"></el-input>
                 </el-form-item>
 
-                <el-form-item label="活动区域">
-                    <el-select v-model="formInline.region" placeholder="活动区域">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+                <el-form-item v-else-if="item.Type.substr(0,4)=='enum' && !isBan(item.Field,banFields)"
+                              :label="(item.Comment.split(':'))[0]">
+                    <el-select v-model="formInline[item.Field]" :placeholder="(item.Comment.split(':'))[0]">
+                        <el-option v-for="each in getEnum((item.Comment.split(':'))[1])"  :label="each[1]" :value="each[0]"></el-option>
                     </el-select>
                 </el-form-item>
-
-                <el-form-item label="特殊资源">
-                    <el-radio-group v-model="sizeForm.resource" size="medium">
-                        <el-radio border label="线上品牌商赞助"></el-radio>
-                        <el-radio border label="线下场地免费"></el-radio>
-                    </el-radio-group>
-                </el-form-item>
-
-                <el-button type="primary">查询</el-button>
             </el-form>
+            <el-button type="primary">查询</el-button>
         </div>
 
         <!--表格-->
@@ -62,9 +52,11 @@
 
         <!--页码-->
         <el-pagination
+                @current-change="handleCurrentChange"
+                @size-change="handleSizeChange"
                 style="margin: 10px auto"
                 background
-                :page-sizes="[5, 15, 20, 25,30,35]"
+                :page-sizes="[2,3,5, 15, 20, 25,30,35]"
                 :page-size="perpages"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="total">
@@ -76,26 +68,43 @@
 <script>
     export default {
         name: 'commontable',
-        props: ['tableData', 'tableTitle', 'perpages', 'total'],
+        props: ['tableData', 'tableTitle', 'perpages', 'total', 'banFields'],
         data() {
             return {
-                vform: '',
-                inputdata: '',
+
                 formInline: {
-                    user: '',
-                    region: ''
-                },
-                sizeForm: {
-                    name: '',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: ''
+
                 },
 
+
+            }
+        },
+        methods: {
+            //当前页码
+            handleCurrentChange(val) {
+                this.$emit('changeCurrent', val)
+            },
+            //每页条数
+            handleSizeChange(val) {
+                this.$emit('changePagesize', val)
+            },
+            //判断是否禁止搜索
+            isBan(needle, haystack) {
+                var length = haystack.length;
+                for (var i = 0; i < length; i++) {
+                    if (haystack[i] == needle) return true;
+                }
+                return false;
+            },
+            //获取enum键值
+            getEnum(data) {
+               let sel=data.split(',');
+                let arr=[];
+                for(let i of sel){
+                    arr.push(i.split('='))
+                 }
+                 console.log(this.formInline.is_backend)
+                return arr
             }
         },
 

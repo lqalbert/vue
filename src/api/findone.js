@@ -1,12 +1,11 @@
 import request from '@/utils/request'
 
-export function getData(url, perpages, nowpage) {
+export function findOne(table,id) {
     return request({
-        url: url,
+        url: '/'+table+'/one',
         method: 'post',
         data: {
-            perpages,
-            nowpage
+          id
         }
     })
 }
