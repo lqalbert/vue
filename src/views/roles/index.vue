@@ -7,11 +7,17 @@
         <div class="components-container">
             <el-dialog v-el-drag-dialog @dragDialog="handleDrag" title="添加角色" :visible.sync="dialogTableVisible">
 
-                <!--<el-select ref="select" v-model="value" placeholder="请选择">
-                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                </el-select>-->
+
                 <el-form :rules="rules" ref="addForm" :model="addForm" label-position="left" label-width="70px" style='width: 400px; margin-left:50px;'>
+
+                    <el-form-item :label="title" prop="role_name">
+                        <el-select ref="select" v-model="value" placeholder="请选择">
+                            <!--<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">-->
+                            <el-option label="选择父类" value="test哈哈">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+
 
                     <el-form-item :label="title" prop="role_name">
                         <el-input v-model="addForm.role_name"></el-input>
