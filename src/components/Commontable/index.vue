@@ -2,26 +2,30 @@
     <div class="contable">
         <!--顶部按钮和搜索框-->
         <div>
-            <el-button type="primary" icon="el-icon-circle-plus">添加数据</el-button>
-            <el-button type="danger" icon="el-icon-delete" style="margin-bottom: 10px;">批量删除</el-button>
+            <el-button type="primary" icon="el-icon-circle-plus" @click="addRow">添加数据</el-button>
+            <el-button type="danger" @click="deleteMuti" icon="el-icon-delete" style="margin-bottom: 10px;">批量删除</el-button>
             <el-form v-for="item in tableTitle" :inline="true" :model="formInline" class="demo-form-inline"
                      style="display: inline-block;margin-left: 20px;">
-                <el-form-item v-if="item.Type.substr(0,4)=='varc' && !isBan(item.Field,banFields)" :label="item.Comment">
-                    <el-input v-model="formInline[item.Field]" :placeholder="item.Comment"></el-input>
+                <el-form-item v-if="item.Type.substr(0,4)=='varc' && !isBan(item.Field,banFields)"
+                              :label="item.Comment">
+                    <el-input v-model="(formInline.varchar)[item.Field]" :placeholder="item.Comment"></el-input>
                 </el-form-item>
 
                 <el-form-item v-else-if="item.Type.substr(0,4)=='enum' && !isBan(item.Field,banFields)"
                               :label="(item.Comment.split(':'))[0]">
-                    <el-select v-model="formInline[item.Field]" :placeholder="(item.Comment.split(':'))[0]">
-                        <el-option v-for="each in getEnum((item.Comment.split(':'))[1])"  :label="each[1]" :value="each[0]"></el-option>
+                    <el-select v-model="(formInline.enum)[item.Field]" :placeholder="(item.Comment.split(':'))[0]">
+                        <el-option v-for="each in getEnum((item.Comment.split(':'))[1])" :label="each[1]"
+                                   :value="each[0]"></el-option>
                     </el-select>
                 </el-form-item>
             </el-form>
-            <el-button type="primary">查询</el-button>
+            <el-button type="primary" @click="search">查询</el-button>
+            <el-button type="primary" @click="reload">重置</el-button>
         </div>
 
         <!--表格-->
         <el-table
+                @selection-change="handleSelectionChange"
                 border
                 ref="multipleTable"
                 :data="tableData"
@@ -31,9 +35,10 @@
                     type="selection"
                     width="55">
             </el-table-column>
-            <el-table-column v-for="item in tableTitle"
-                             :label="item.Type.substr(0,4)=='enum'?(item.Comment.split(':'))[0]:item.Comment"
-                             :prop="item.Field">
+            <el-table-column
+                    v-for="item in tableTitle"
+                    :label="item.Type.substr(0,4)=='enum'?(item.Comment.split(':'))[0]:item.Comment"
+                    :prop="item.Field">
             </el-table-column>
             <el-table-column label="操作" width="180">
                 <template slot-scope="scope">
@@ -44,7 +49,7 @@
                     <el-button
                             size="mini"
                             type="danger"
-                            @click="handleDelete(scope.$index, scope.row)">删除
+                            @click="deleteOne(scope.row)">删除
                     </el-button>
                 </template>
             </el-table-column>
@@ -56,7 +61,7 @@
                 @size-change="handleSizeChange"
                 style="margin: 10px auto"
                 background
-                :page-sizes="[2,3,5, 15, 20, 25,30,35]"
+                :page-sizes="[2,3,5,10,15, 20, 25,30,35]"
                 :page-size="perpages"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="total">
@@ -71,15 +76,24 @@
         props: ['tableData', 'tableTitle', 'perpages', 'total', 'banFields'],
         data() {
             return {
-
+                ids: [],
                 formInline: {
-
+                    enum: {},
+                    varchar: {}
                 },
 
 
             }
         },
         methods: {
+            //批量获取ids
+            handleSelectionChange(val) {
+
+                for(let i in val){
+                    //console.log(val[i]['id'])
+                    this.ids.push(val[i]['id'])
+                }
+            },
             //当前页码
             handleCurrentChange(val) {
                 this.$emit('changeCurrent', val)
@@ -88,8 +102,35 @@
             handleSizeChange(val) {
                 this.$emit('changePagesize', val)
             },
+            //查询
+            search() {
+                this.$emit('search', this.formInline)
+            },
+            //重置
+            reload() {
+                this.formInline.enum = {}
+                this.formInline.varchar = {}
+                this.$emit('reload')
+            },
+
+            //删除一个
+            deleteOne(row){
+                this.$emit('handleDelete', [row.id])
+            },
+            //删除多个
+            deleteMuti() {
+                this.$emit('handleDelete', this.ids)
+            },
+            //添加
+            addRow(){
+                this.$emit('addRow')
+            },
+            //编辑
+            handleEdit(row) {
+                this.$emit('handleEdit', row.id)
+            },
             //判断是否禁止搜索
-            isBan(needle, haystack) {
+            isBan(needle, haystack){
                 var length = haystack.length;
                 for (var i = 0; i < length; i++) {
                     if (haystack[i] == needle) return true;
@@ -98,12 +139,12 @@
             },
             //获取enum键值
             getEnum(data) {
-               let sel=data.split(',');
-                let arr=[];
-                for(let i of sel){
+                let sel = data.split(',');
+                let arr = [];
+                for (let i of sel) {
                     arr.push(i.split('='))
-                 }
-                 console.log(this.formInline.is_backend)
+                }
+                // console.log(this.formInline)
                 return arr
             }
         },
