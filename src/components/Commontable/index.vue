@@ -18,6 +18,7 @@
                                    :value="each[0]"></el-option>
                     </el-select>
                 </el-form-item>
+
             </el-form>
             <el-button type="primary" @click="search">查询</el-button>
             <el-button type="primary" @click="reload">重置</el-button>
