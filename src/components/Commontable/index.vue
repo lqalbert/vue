@@ -89,9 +89,7 @@
         methods: {
             //批量获取ids
             handleSelectionChange(val) {
-
                 for(let i in val){
-                    //console.log(val[i]['id'])
                     this.ids.push(val[i]['id'])
                 }
             },
@@ -127,8 +125,8 @@
                 this.$emit('addRow')
             },
             //编辑
-            handleEdit(row) {
-                this.$emit('handleEdit', row.id)
+            handleEdit(index,row) {
+                this.$emit('handleEdit', row)
             },
             //判断是否禁止搜索
             isBan(needle, haystack){

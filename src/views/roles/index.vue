@@ -13,7 +13,8 @@
                          style='width: 400px; margin-left:50px;'>
 
                     <el-form-item :label="role_name" prop="role_name">
-                        <el-input v-model="addForm.role_name"></el-input>
+                        <el-input v-model="addForm.role_name" placeholder="只能有字母组成"></el-input>
+                        <!-- <el-input type="hidden" v-model="addForm.id"></el-input>-->
                     </el-form-item>
 
                     <el-form-item :label="role_comment" prop="role_name">
@@ -30,29 +31,29 @@
                             <el-option
                                     v-for="item in options"
                                     :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
+                                    :label="item.role_comment"
+                                    :value="item.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
 
 
                     <el-form-item :label="is_use" prop="is_use">
-                        <el-radio-group v-model="addForm.is_use"  >
+                        <el-radio-group v-model="addForm.is_use">
                             <el-radio label="y" border>是</el-radio>
                             <el-radio label="n" border>否</el-radio>
                         </el-radio-group>
                     </el-form-item>
 
                     <el-form-item :label="is_robot" prop="is_robot">
-                        <el-radio-group v-model="addForm.is_robot"  >
+                        <el-radio-group v-model="addForm.is_robot">
                             <el-radio label="y" border>是</el-radio>
                             <el-radio label="n" border>否</el-radio>
                         </el-radio-group>
                     </el-form-item>
 
                     <el-form-item :label="is_backend" prop="is_backend">
-                        <el-radio-group v-model="addForm.is_backend"  >
+                        <el-radio-group v-model="addForm.is_backend">
                             <el-radio label="y" border>是</el-radio>
                             <el-radio label="n" border>否</el-radio>
                         </el-radio-group>
@@ -78,7 +79,7 @@
     import {getData, handleDelete} from '@/api/table'
     import Commontable from '@/components/Commontable'
     import elDragDialog from '@/directive/el-dragDialog'
-    import getRoles from '@/api/role'
+    import {getRoles, save, findOne} from '@/api/role'
 
     export default {
         name: 'dragDialog-demo',
@@ -104,28 +105,9 @@
                     role_comment: [{required: true, message: '角色说名必须填写', trigger: 'blur'}],
                     role_mark: [{required: true, message: '角色标签必须填写', trigger: 'blur'}],
                 },
-                addForm: {
-
-                },
-                options: [{
-                    value: '选项1',
-                    label: '黄金糕'
-                }, {
-                    value: '选项2',
-                    label: '双皮奶'
-                }, {
-                    value: '选项3',
-                    label: '蚵仔煎'
-                }, {
-                    value: '选项4',
-                    label: '龙须面'
-                }, {
-                    value: '选项5',
-                    label: '北京烤鸭'
-                }],
+                addForm: {},
+                options: [],
                 value4: '选项2',
-
-
                 perpages: 0,
                 cur_page: 0,
                 total: 1,
@@ -145,25 +127,36 @@
             handleDrag() {
                 //this.$refs.select.blur()
             },
+            //请求可添加的角色类型
+            canHandle() {
+                getRoles().then(response => {
+                    this.options = response.data
+                }).catch(error => {
+                    console.log(error)
+                })
+            },
             //确认提交
-            confirms(){
-
-
-                console.log(this.addForm)
+            confirms() {
+                save(this.addForm).then(response => {
+                    console.log(response)
+                }).catch(error => {
+                    console.log(error)
+                })
+                this.getData()
+                this.dialogTableVisible = false
             },
             dialogFormVisible() {
                 this.dialogTableVisible = false
             },
             openDialog() {
                 this.dialogTableVisible = true
-                getRoles().then(response => {
-                   console.log(response)
-                }).catch(error => {
-                    console.log(error)
-                })
+                this.addForm = {
+                    is_backend: 'y',
+                    is_robot: 'n',
+                    is_use: 'y'
+                }
+                this.canHandle();
             },
-
-
             //当前页码
             handleCurrentChange: function (val) {
                 this.cur_page = val
@@ -180,9 +173,15 @@
                 this.getData()
             },
             //编辑
-            handleEdit: function (id) {
-
-                //this.getData()
+            handleEdit: function (row) {
+                this.dialogTableVisible = true
+                findOne(row.id).then(response => {
+                    this.addForm = response.data
+                    //this.addForm.parent_id=undefined
+                }).catch(error => {
+                    console.log(error)
+                })
+                this.canHandle();
             },
             //删除一条
             handleDelete(ids) {
