@@ -123,7 +123,6 @@
         },
         computed: {},
         methods: {
-
             handleDrag() {
                 //this.$refs.select.blur()
             },
@@ -138,7 +137,6 @@
             //确认提交
             confirms() {
                 save(this.addForm).then(response => {
-                    console.log(response)
                 }).catch(error => {
                     console.log(error)
                 })
@@ -169,7 +167,9 @@
             },
             //查询搜索
             search: function (val) {
+                this.cur_page = 0
                 this.searchForm = JSON.stringify(val)
+                console.log(val)
                 this.getData()
             },
             //编辑
@@ -185,7 +185,7 @@
             },
             //删除一条
             handleDelete(ids) {
-                //console.log(ids)
+
                 if (ids.length < 1) {
                     alert('请先选择一条数据！')
                 } else {
