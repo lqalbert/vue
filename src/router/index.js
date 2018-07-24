@@ -42,7 +42,7 @@ export const constantRouterMap = [
     {
         path: '/roles',
         component: Layout,
-        redirect: '/roles',
+        redirect: '/roles/list',
         name: '角色列表',
         meta: {title: 'Roles', icon: 'example'},
         children: [
