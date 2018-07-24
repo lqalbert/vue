@@ -31,16 +31,18 @@ export const constantRouterMap = [
         redirect: '/dashboard',
         name: 'Dashboard',
         hidden: true,
-        children: [{
-            path: 'dashboard',
-            component: () => import('@/views/dashboard/index')
-        }]
+        children: [
+            {
+                path: 'dashboard',
+                component: () => import('@/views/dashboard/index')
+            }
+        ]
     },
 
     {
         path: '/roles',
         component: Layout,
-        redirect: '/roles/list',
+        redirect: '/roles',
         name: '角色列表',
         meta: {title: 'Roles', icon: 'example'},
         children: [
@@ -50,46 +52,9 @@ export const constantRouterMap = [
                 component: () => import('@/views/roles/index'),
                 meta: {title: '角色列表', icon: 'table'}
             }
+
         ]
     },
-
-
-
-   /* {
-        path: '/example',
-        component: Layout,
-        redirect: '/example/table',
-        name: 'Example',
-        meta: {title: 'Example', icon: 'example'},
-        children: [
-            {
-                path: 'table',
-                name: 'Commontable',
-                component: () => import('@/views/table/index'),
-                meta: {title: 'Commontable', icon: 'table'}
-            },
-            {
-                path: 'tree',
-                name: 'Tree',
-                component: () => import('@/views/tree/index'),
-                meta: {title: 'Tree', icon: 'tree'}
-            }
-        ]
-    },
-
-    {
-        path: '/form',
-        component: Layout,
-        children: [
-            {
-                path: 'index',
-                name: 'Form',
-                component: () => import('@/views/form/index'),
-                meta: {title: 'Form', icon: 'form'}
-            }
-        ]
-    },*/
-
     {path: '*', redirect: '/404', hidden: true}
 ]
 
