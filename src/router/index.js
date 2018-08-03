@@ -56,7 +56,7 @@ export const constantRouterMap = [
             {
                 path: 'menu',
                 name: '菜单列表',
-                component: () => import('@/views/roles/index'),
+                component: () => import('@/views/menus/index'),
                 meta: {title: '菜单列表', icon: 'lock'}
             },
             {
